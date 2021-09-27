@@ -36,8 +36,9 @@ RUN set -eux && \
     rm -rf /var/cache/apk/*
 
 ARG MAJOR_VERSION=5.0
-ARG ZBX_VERSION=${MAJOR_VERSION}.15
-ARG ZBX_SOURCES=https://git.zabbix.com/scm/zbx/zabbix.git
+ARG ZBX_VERSION=${MAJOR_VERSION}.15-custom-proc
+ARG ZBX_CUSTOM_BRANCH=custom-mod/${ZBX_VERSION}
+ARG ZBX_SOURCES=https://github.com/TechMagicKK/zabbix.git
 
 ENV TERM=xterm ZBX_VERSION=${ZBX_VERSION} ZBX_SOURCES=${ZBX_SOURCES}
 
@@ -57,7 +58,7 @@ RUN set -eux && \
             openssl-dev \
             zlib-dev && \
     cd /tmp/ && \
-    git -c advice.detachedHead=false clone ${ZBX_SOURCES} --branch ${ZBX_VERSION} --depth 1 --single-branch zabbix-${ZBX_VERSION} && \
+    git -c advice.detachedHead=false clone ${ZBX_SOURCES} --branch ${ZBX_CUSTOM_BRANCH} --depth 1 --single-branch zabbix-${ZBX_VERSION} && \
     cd /tmp/zabbix-${ZBX_VERSION} && \
     zabbix_revision=`git rev-parse --short HEAD` && \
     sed -i "s/{ZABBIX_REVISION}/$zabbix_revision/g" src/go/pkg/version/version.go && \
